@@ -1,0 +1,37 @@
+// Copyright (c) 2026 angrypig555
+// SPDX-License-Identifier: MIT
+
+use std::{env, io::{self, Error, ErrorKind::ConnectionAborted, Read, Write}};
+
+fn install() -> std::io::Result<()> {
+    print!("THIS WILL INSTALL AND CONFIGURE THE SERVER INCLUDING MODIFYING PASSWORDS AND OVERWRITING CONFIGURATIONS\nTHIS CANNOT BE UNDONE\nVERIFY THAT YOU ARE ON THE CORRECT SERVER\nContinue? [y/n]: ");
+    let mut prompt_answer = String::new();
+    io::stdout().flush()?;
+    io::stdin().read_line(&mut prompt_answer)?;
+    if prompt_answer.to_lowercase().trim() != "y" {
+        return Err(Error::new(ConnectionAborted, "Installation has been aborted"))
+    }
+    Ok(())
+}
+
+fn main() -> std::io::Result<()> {
+    println!("server management tool - smt");
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        panic!("not enough arguments, see help for usage");
+    }
+    if args.len() > 2 {
+        panic!("too many arguments, see help for usage");
+    }
+    if args[1] == "help" {
+        println!("arguments for smt:\n help - displays the help menu\n install - installs the neccesary software (php, mysql, etc...)\n backup - dumps and backs up web and databases\n logs - compress all the logs into a downloadable file\n\nCopyright (c) 2026 angrypig555; Licensed under the MIT License")
+    } else if args[1] == "install" {
+        println!("install selected");
+        install()?;
+    } else if args[1] == "backup" {
+        println!("backup selected");
+    } else if args[1] == "logs" {
+        println!("logs selected");
+    }
+    Ok(())
+}
